@@ -1,17 +1,12 @@
 """
 Blueprint Diff Engine - Phase Z
-=================================
-
-Structural diff with causal hints for smart UI.
 """
 
 from dataclasses import dataclass, field
 from typing import Literal
 
 
-# =============================================================================
 # DIFF TYPES
-# =============================================================================
 
 DiffType = Literal[
     "agent_added",
@@ -85,9 +80,7 @@ class BlueprintDiff:
         }
 
 
-# =============================================================================
 # DIFF ENGINE
-# =============================================================================
 
 def compute_blueprint_diff(
     source_blueprint: dict,
@@ -97,8 +90,6 @@ def compute_blueprint_diff(
 ) -> BlueprintDiff:
     """
     Compute structural diff between two blueprints.
-    
-    Emits causal hints for smart UI display.
     """
     diff = BlueprintDiff(
         source_version_id=source_version_id,
@@ -131,7 +122,7 @@ def compute_blueprint_diff(
     for agent_id in source_ids - target_ids:
         agent = source_agents[agent_id]
         
-        # Check if this was on critical path (heuristic: coordinator dependency)
+        # Check if this was on critical path 
         was_coordinator_dep = any(
             agent_id in target_agents.get(a, {}).get("execution", {}).get("depends_on", [])
             for a in target_ids
@@ -245,9 +236,7 @@ def compute_blueprint_diff(
     return diff
 
 
-# =============================================================================
 # HELPERS
-# =============================================================================
 
 def summarize_diff(diff: BlueprintDiff) -> str:
     """Generate human-readable summary of diff."""
