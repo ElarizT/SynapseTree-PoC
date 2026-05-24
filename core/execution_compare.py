@@ -1,8 +1,5 @@
 """
 Execution Comparison - Phase Z
-===============================
-
-Compare two execution runs and output causal attribution.
 """
 
 from dataclasses import dataclass, field
@@ -11,9 +8,7 @@ from typing import Optional
 from core.models import ExecutionRun
 
 
-# =============================================================================
 # COMPARISON RESULT
-# =============================================================================
 
 @dataclass
 class ExecutionComparison:
@@ -52,9 +47,7 @@ class ExecutionComparison:
         }
 
 
-# =============================================================================
 # COMPARISON ENGINE
-# =============================================================================
 
 def compare_executions(run1: ExecutionRun, run2: ExecutionRun) -> ExecutionComparison:
     """
@@ -111,8 +104,8 @@ def _attribute_causes(
     # Find biggest improvements
     sorted_deltas = sorted(agent_deltas.items(), key=lambda x: x[1])
     
-    for agent_id, delta in sorted_deltas[:3]:  # Top 3 improvements
-        if delta < -100:  # More than 100ms improvement
+    for agent_id, delta in sorted_deltas[:3]: 
+        if delta < -100: 
             causes.append({
                 "type": "agent_speedup",
                 "agent_id": agent_id,
@@ -121,8 +114,8 @@ def _attribute_causes(
             })
     
     # Find regressions
-    for agent_id, delta in sorted_deltas[-3:]:  # Top 3 regressions
-        if delta > 100:  # More than 100ms slower
+    for agent_id, delta in sorted_deltas[-3:]: 
+        if delta > 100: 
             causes.append({
                 "type": "agent_regression",
                 "agent_id": agent_id,
@@ -157,7 +150,7 @@ def _attribute_causes(
     total_agent_improvement = sum(-d for d in agent_deltas.values() if d < 0)
     total_improvement = run1.total_latency_ms - run2.total_latency_ms
     
-    if total_improvement > total_agent_improvement * 1.2:  # 20% buffer
+    if total_improvement > total_agent_improvement * 1.2: 
         causes.append({
             "type": "parallelism_improved",
             "description": "Improved parallel execution",
@@ -167,16 +160,14 @@ def _attribute_causes(
     return causes
 
 
-# =============================================================================
 # HELPERS
-# =============================================================================
 
 def summarize_comparison(comparison: ExecutionComparison) -> str:
     """Generate human-readable summary."""
     if comparison.speedup_percent > 0:
-        return f"✅ {comparison.speedup_percent:.1f}% faster ({abs(comparison.latency_delta_ms):.0f}ms saved)"
+        return f"{comparison.speedup_percent:.1f}% faster ({abs(comparison.latency_delta_ms):.0f}ms saved)"
     elif comparison.speedup_percent < 0:
-        return f"❌ {abs(comparison.speedup_percent):.1f}% slower ({comparison.latency_delta_ms:.0f}ms added)"
+        return f"{abs(comparison.speedup_percent):.1f}% slower ({comparison.latency_delta_ms:.0f}ms added)"
     else:
         return "No significant change"
 
@@ -188,6 +179,5 @@ def is_valid_comparison(run1: ExecutionRun, run2: ExecutionRun) -> tuple[bool, s
         return False, "Different inputs"
     
     # Check versions are related (would need version lineage check)
-    # For now, allow all comparisons
     
     return True, ""
