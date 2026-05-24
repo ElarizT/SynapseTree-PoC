@@ -21,20 +21,18 @@ from storage.app_store import get_app_store
 from core.models import ExecutionRun, compute_inputs_hash
 
 
-# =============================================================================
 # REQUEST/RESPONSE MODELS
-# =============================================================================
 
 class GenerateBlueprintRequest(BaseModel):
     description: str
-    app_id: Optional[str] = None  # If None, create new app
-    app_name: Optional[str] = None  # For new app
+    app_id: Optional[str] = None 
+    app_name: Optional[str] = None
 
 
 class GenerateBlueprintResponse(BaseModel):
     app_id: str
     version_id: str
-    blueprint_id: str  # Alias for version_id (backwards compat)
+    blueprint_id: str  # Alias for version_id 
     blueprint: dict
 
 
@@ -58,16 +56,12 @@ class OptimizationApplyRequest(BaseModel):
     suggestion_id: str
 
 
-# =============================================================================
 # ROUTER
-# =============================================================================
 
 router = APIRouter(prefix="/api", tags=["web-mvp"])
 
 
-# =============================================================================
 # BLUEPRINT ENDPOINTS
-# =============================================================================
 
 @router.post("/blueprint/generate")
 async def generate_blueprint(request: GenerateBlueprintRequest) -> GenerateBlueprintResponse:
@@ -144,9 +138,7 @@ async def get_blueprint(blueprint_id: str, app_id: Optional[str] = None) -> dict
     raise HTTPException(status_code=404, detail=f"Blueprint {blueprint_id} not found")
 
 
-# =============================================================================
 # EXECUTION ENDPOINTS
-# =============================================================================
 
 @router.post("/execution/run")
 async def run_execution(request: RunExecutionRequest) -> RunExecutionResponse:
@@ -384,9 +376,7 @@ async def get_critical_path(execution_id: str, app_id: Optional[str] = None) -> 
         }
 
 
-# =============================================================================
 # OPTIMIZATION ENDPOINTS
-# =============================================================================
 
 @router.get("/optimization/insights/{blueprint_id}")
 async def get_optimization_insights(blueprint_id: str, app_id: Optional[str] = None) -> dict:
@@ -499,7 +489,7 @@ async def apply_optimization(request: OptimizationApplyRequest) -> dict:
     # Apply optimization
     optimized = _apply_optimization(original, request.suggestion_id)
     
-    # Create new version as child of original (persisted)
+    # Create new version as child of original
     new_version = store.create_version(
         app_id=found_app_id,
         blueprint=optimized,
@@ -516,9 +506,7 @@ async def apply_optimization(request: OptimizationApplyRequest) -> dict:
     }
 
 
-# =============================================================================
 # HELPER FUNCTIONS
-# =============================================================================
 
 def _extract_timeline_spans(execution_result: dict) -> list[dict]:
     """Extract timeline spans from execution result."""
@@ -614,9 +602,7 @@ def _apply_optimization(blueprint: dict, suggestion_id: str) -> dict:
     return optimized
 
 
-# =============================================================================
 # PHASE Z: APP MANAGEMENT ENDPOINTS
-# =============================================================================
 
 class CreateAppRequest(BaseModel):
     name: str
@@ -696,9 +682,7 @@ async def delete_app(app_id: str) -> dict:
     return {"deleted": True, "app_id": app_id}
 
 
-# =============================================================================
 # PHASE Z: VERSION ENDPOINTS
-# =============================================================================
 
 @router.get("/apps/{app_id}/versions")
 async def get_version_history(app_id: str) -> dict:
@@ -795,9 +779,7 @@ async def fork_version(app_id: str, request: ForkVersionRequest) -> dict:
     }
 
 
-# =============================================================================
 # PHASE Z: DIFF ENDPOINTS
-# =============================================================================
 
 @router.get("/diff/{app_id}/{version1_id}/{version2_id}")
 async def get_blueprint_diff(app_id: str, version1_id: str, version2_id: str) -> dict:
@@ -828,9 +810,7 @@ async def get_blueprint_diff(app_id: str, version1_id: str, version2_id: str) ->
     }
 
 
-# =============================================================================
 # PHASE Z: EXECUTION COMPARISON ENDPOINTS
-# =============================================================================
 
 @router.get("/compare/{app_id}/{run1_id}/{run2_id}")
 async def compare_executions(app_id: str, run1_id: str, run2_id: str) -> dict:
@@ -856,9 +836,7 @@ async def compare_executions(app_id: str, run1_id: str, run2_id: str) -> dict:
     }
 
 
-# =============================================================================
 # APP BUILDER ENDPOINTS
-# =============================================================================
 
 class BuildAppRequest(BaseModel):
     description: str
@@ -869,7 +847,7 @@ class BuildAppResponse(BaseModel):
     app_id: str
     version_id: str
     execution_id: str
-    app_code: dict  # {html, css, javascript, combined}
+    app_code: dict  
     timeline_ms: float
     agents_used: list[str]
 
