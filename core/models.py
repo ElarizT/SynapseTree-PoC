@@ -1,9 +1,5 @@
 """
 Phase Z Core Models
-====================
-
-First-class entities for the no-code agentic builder.
-All versions are IMMUTABLE.
 """
 
 from dataclasses import dataclass, field
@@ -12,16 +8,10 @@ from typing import Optional
 import hashlib
 import json
 
-
-# =============================================================================
-# AGENTIC APP
-# =============================================================================
-
 @dataclass
 class AgenticApp:
     """
     A saved agentic application.
-    
     An app is a container for blueprint versions.
     """
     id: str
@@ -53,9 +43,7 @@ class AgenticApp:
         )
 
 
-# =============================================================================
 # BLUEPRINT VERSION (IMMUTABLE)
-# =============================================================================
 
 @dataclass
 class BlueprintVersion:
@@ -70,8 +58,8 @@ class BlueprintVersion:
     blueprint_json: dict
     created_at: datetime
     parent_version_id: Optional[str] = None
-    message: str = ""  # Commit-like message
-    depth: int = 0  # Lineage depth (0 = root)
+    message: str = ""  
+    depth: int = 0  
     
     def to_dict(self) -> dict:
         return {
@@ -103,9 +91,7 @@ class BlueprintVersion:
         return hashlib.sha256(content.encode()).hexdigest()[:12]
 
 
-# =============================================================================
 # EXECUTION RUN
-# =============================================================================
 
 @dataclass
 class ExecutionRun:
@@ -158,9 +144,7 @@ class ExecutionRun:
         )
 
 
-# =============================================================================
 # HELPERS
-# =============================================================================
 
 def compute_inputs_hash(inputs: dict) -> str:
     """Compute hash of execution inputs for replay validation."""
