@@ -25,29 +25,27 @@ from api.serialization import (
 )
 
 
-# =============================================================================
 # API TYPES
-# =============================================================================
 
 @dataclass
 class APIRunRequest:
     """Request for executing a Blueprint."""
-    blueprint: dict                              # Serialized Blueprint
-    execution_options: Optional[dict] = None     # Overrides (max_concurrency, fail_fast)
+    blueprint: dict                              
+    execution_options: Optional[dict] = None     
 
 
 @dataclass
 class APIRunResponse:
     """Response from Blueprint execution."""
     execution_id: str
-    execution_result: dict                       # Serialized ExecutionResult
+    execution_result: dict                       
     warnings: list[str] = field(default_factory=list)
     duration_ms: float = 0.0
 
 
 @dataclass
 class APIError:
-    """Error response from API."""
+    """Error response from API"""
     code: str
     message: str
     details: Optional[dict] = None
@@ -61,9 +59,7 @@ class APIError:
         }
 
 
-# =============================================================================
 # ERROR CODES
-# =============================================================================
 
 ERR_INVALID_BLUEPRINT = "INVALID_BLUEPRINT"
 ERR_VALIDATION_FAILED = "VALIDATION_FAILED"
@@ -73,9 +69,7 @@ ERR_INTERNAL_ERROR = "INTERNAL_ERROR"
 ERR_MISSING_DEPENDENCY = "MISSING_DEPENDENCY"
 
 
-# =============================================================================
 # VALIDATION API
-# =============================================================================
 
 def validate_blueprint_api(blueprint_dict: dict) -> dict:
     """
@@ -175,9 +169,7 @@ def validate_blueprint_api(blueprint_dict: dict) -> dict:
         }
 
 
-# =============================================================================
 # EXECUTION API
-# =============================================================================
 
 async def run_blueprint_api(request: APIRunRequest) -> APIRunResponse | APIError:
     """
@@ -272,9 +264,7 @@ async def run_blueprint_api(request: APIRunRequest) -> APIRunResponse | APIError
         )
 
 
-# =============================================================================
 # NL TO BLUEPRINT API
-# =============================================================================
 
 def generate_blueprint_api(prompt: str, global_settings: dict = None) -> dict:
     """
@@ -355,9 +345,7 @@ def generate_blueprint_api(prompt: str, global_settings: dict = None) -> dict:
         }
 
 
-# =============================================================================
 # ANALYSIS APIs (READ-ONLY)
-# =============================================================================
 
 def replay_execution_api(
     blueprint_dict: dict,
