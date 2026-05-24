@@ -24,9 +24,7 @@ from execution_result import (
 )
 
 
-# =============================================================================
 # BLUEPRINT SERIALIZATION
-# =============================================================================
 
 def blueprint_to_dict(blueprint: Blueprint) -> dict:
     """
@@ -191,9 +189,7 @@ def dict_to_blueprint(data: dict) -> Blueprint:
     )
 
 
-# =============================================================================
 # EXECUTION RESULT SERIALIZATION
-# =============================================================================
 
 def execution_result_to_dict(result: ExecutionResult) -> dict:
     """
@@ -338,9 +334,7 @@ def dict_to_execution_result(data: dict) -> ExecutionResult:
     )
 
 
-# =============================================================================
 # UTILITY FUNCTIONS
-# =============================================================================
 
 def to_json(obj: Any, indent: int = 2) -> str:
     """Convert any serializable object to JSON string."""
